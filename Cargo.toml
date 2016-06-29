@@ -1,0 +1,7 @@
+[package]
+name = "entity_manager"
+version = "0.1.0"
+authors = ["Olav Lindekleiv <olav@lindekleiv.com>"]
+
+[dependencies]
+uuid = { version = "0.2", features = ["v4"] }
