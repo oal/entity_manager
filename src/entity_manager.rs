@@ -1,11 +1,11 @@
+pub use std::collections::HashMap;
+pub use uuid::Uuid;
+pub type Entity = Uuid;
+
 #[macro_export]
 macro_rules! entity_manager {
     ( $($x:ident:$t:ty),* ) => {
-        use std::collections::HashMap;
-        use uuid::Uuid;
-	    type Entity = Uuid;
-
-        struct EntityManager {
+        pub struct EntityManager {
         $(
             pub $x: HashMap<Entity, $t>,
         )*
@@ -13,7 +13,7 @@ macro_rules! entity_manager {
 
         #[allow(dead_code)]
         impl EntityManager {
-            fn new() -> Self {
+            pub fn new() -> Self {
                 EntityManager {
                     $(
                         $x: HashMap::new(),
@@ -21,26 +21,26 @@ macro_rules! entity_manager {
                 }
             }
 
-            fn create_entity(&self) -> Uuid {
+            pub fn create_entity(&self) -> Entity {
                 Uuid::new_v4()
             }
 
-            fn add_component<T: EntityComponent + Sized>(&mut self, entity: Entity, component: T) {
+            pub fn add_component<T: EntityComponent + Sized>(&mut self, entity: Entity, component: T) {
                 component.insert(self, entity);
             }
 
-            fn remove_component<T: EntityComponent + Sized>(&mut self, entity: Entity, component: T) {
+            pub fn remove_component<T: EntityComponent + Sized>(&mut self, entity: Entity, component: T) {
                 component.remove(self, entity);
             }
 
-            fn remove_entity(&mut self, entity: Entity) {
+            pub fn remove_entity(&mut self, entity: Entity) {
                 $(
                     self.$x.remove(&entity);
                 )*
             }
         }
 
-        trait EntityComponent: Sized {
+        pub trait EntityComponent: Sized {
             fn insert(self, em: &mut EntityManager, entity: Entity);
             fn remove(self, em: &mut EntityManager, entity: Entity);
         }
