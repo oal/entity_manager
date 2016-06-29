@@ -1,7 +1,9 @@
+use entity_manager::*;
+
 #[derive(Copy, Clone)]
-struct Position(f64, f64);
+pub struct Position(f64, f64);
 #[derive(Copy, Clone)]
-struct Physics;
+pub struct Physics;
 
 #[test]
 fn simple_entity_manager() {
