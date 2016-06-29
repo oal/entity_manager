@@ -1,13 +1,10 @@
-pub use std::collections::HashMap;
-pub use uuid::Uuid;
-pub type Entity = Uuid;
-
 #[macro_export]
 macro_rules! entity_manager {
-    ( $($x:ident:$t:ty),* ) => {
+    ($entity:ty, {$($field:ident:$component:ty),*} ) => {
+        pub type Entity = $entity;
         pub struct EntityManager {
         $(
-            pub $x: HashMap<Entity, $t>,
+            pub $field: HashMap<Entity, $component>,
         )*
         }
 
@@ -16,13 +13,13 @@ macro_rules! entity_manager {
             pub fn new() -> Self {
                 EntityManager {
                     $(
-                        $x: HashMap::new(),
+                        $field: HashMap::new(),
                     )*
                 }
             }
 
             pub fn create_entity(&self) -> Entity {
-                Uuid::new_v4()
+                Entity::new_v4()
             }
 
             pub fn add_component<T: EntityComponent + Sized>(&mut self, entity: Entity, component: T) {
@@ -35,7 +32,7 @@ macro_rules! entity_manager {
 
             pub fn remove_entity(&mut self, entity: Entity) {
                 $(
-                    self.$x.remove(&entity);
+                    self.$field.remove(&entity);
                 )*
             }
         }
@@ -46,12 +43,12 @@ macro_rules! entity_manager {
         }
 
         $(
-            impl EntityComponent for $t {
+            impl EntityComponent for $component {
                 fn insert(self, em: &mut EntityManager, entity: Entity) {
-                    &em.$x.insert(entity, self);
+                    &em.$field.insert(entity, self);
                 }
                 fn remove(self, em: &mut EntityManager, entity: Entity) {
-                    &em.$x.remove(&entity);
+                    &em.$field.remove(&entity);
                 }
             }
         )*

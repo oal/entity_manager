@@ -6,6 +6,10 @@ these.
 
 ### Example
 ```rust
+// Used inside macro, so these must be imported
+use uuid::Uuid;
+use std::collections::HashMap;
+
 // Define your component structures
 #[derive(Copy, Clone)]
 struct Position(f64, f64);
@@ -13,9 +17,10 @@ struct Position(f64, f64);
 struct Physics;
 
 // Create entity manager with all your component types
-entity_manager!(
-    position: Position,
-    physics: Physics
+entity_manager!(Uuid, {
+        position: Position,
+        physics: Physics
+    }
 );
 
 fn update_movement(em: &mut EntityManager) {

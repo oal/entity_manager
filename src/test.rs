@@ -1,4 +1,5 @@
-use entity_manager::*;
+use uuid::Uuid;
+use std::collections::HashMap;
 
 #[derive(Copy, Clone)]
 pub struct Position(f64, f64);
@@ -7,7 +8,10 @@ pub struct Physics;
 
 #[test]
 fn simple_entity_manager() {
-    entity_manager!(position: Position, physics: Physics);
+    entity_manager!(Uuid, {
+        position: Position,
+        physics: Physics
+    });
 
     let mut em = EntityManager::new();
     let entity = em.create_entity();
@@ -27,7 +31,10 @@ fn simple_entity_manager() {
 
 #[test]
 fn old_insert_entity_manager() {
-    entity_manager!(position: Position, physics: Physics);
+    entity_manager!(Uuid, {
+        position: Position,
+        physics: Physics
+    });
 
     let mut em = EntityManager::new();
     let entity = em.create_entity();
